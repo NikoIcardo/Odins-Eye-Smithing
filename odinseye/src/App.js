@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef }from 'react';
 import './App.css';
 
 import * as THREE from 'three';
@@ -6,7 +6,17 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 
 function App() {
+  const canvas = useRef();
+
+
   const scene = new THREE.Scene();
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvas.current,
+  });
+
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -15,16 +25,9 @@ function App() {
     1000
   );
 
-  const renderer = new THREE.WebGLRenderer();
-
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild( renderer.domElement );
   camera.position.z = 0;
-  camera.position.y = 25;
+  camera.position.y = 300;
   camera.rotation.y = Math.PI / 2;
-
-  const controls = new OrbitControls(camera, renderer.domElement);
 
   const gridHelper = new THREE.GridHelper(100, 100);
   scene.add(gridHelper);
@@ -32,10 +35,7 @@ function App() {
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight); 
 
-
-  
   //Structure 
-
   const addStructure = (size) => {
     const wallTexture = new THREE.TextureLoader().load('castle_wall.jpg'); 
     let geometry = new THREE.BoxGeometry(size, 1, size/2); 
@@ -61,17 +61,29 @@ function App() {
 
   addStructure(50);
 
-
   //sky 
-
   const skyTexture = new THREE.TextureLoader().load('sky.jpg');
   scene.background = skyTexture;
   
+
+  //Camera 
+  const moveCamera = () => {
+
+    const t = document.body.getBoundingClientRect().top;
+    
+    
+    camera.rotation.y = camera.rotation.y - (t * 1);
+
+  }
+  document.body.onscroll = moveCamera;
+
+  //const controls = new OrbitControls(camera, renderer.domElement);
+  // animate
   const animate = () => {
     requestAnimationFrame(animate);
-    
+  
     //controls
-    controls.update();
+    //controls.update();
 
     renderer.render(scene, camera);
   };
@@ -79,6 +91,10 @@ function App() {
   animate();
 
   return <main>
+    <section>
+      <h1>Hello</h1>
+      <canvas ref={canvas} id="bg"></canvas>
+    </section>
   </main>;
 }
 
