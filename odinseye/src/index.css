@@ -1,8 +1,10 @@
+@font-face {
+  font-family: nordic;
+  src: url(./fonts/Norse.otf);
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: nordic;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -16,9 +18,32 @@ canvas {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: -1;
+  padding: 0px;
+  margin: 0px;
+}
+
+main {
+  width: 100vw;
+  color: white;
+  z-index: 1;
+  position: absolute;
+  padding: 0px;
+  margin: 0px; 
+  width: 100vw; 
+  display: grid; 
+  grid-template-columns: repeat(6, 1fr);
+
 }
 
 html {
   padding: 0px;
   margin: 0px; 
 }
+
+body {
+  padding: 0px;
+  margin: 0px; 
+}
+
+

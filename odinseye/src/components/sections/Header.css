@@ -1,0 +1,10 @@
+.header {
+  color: #2ec946;
+  grid-column: 2 / span 4;
+  text-align: center;
+  text-shadow:
+  0 0 10px #83ccaef6, 
+  0 3px 10px #83ccaef6, 
+  0 -3px 10px #83ccaef6;
+}
+
