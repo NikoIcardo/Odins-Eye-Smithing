@@ -17,9 +17,10 @@ export const graphics = () => {
     1000
   );
 
-  camera.position.z = 0;
-  camera.position.y = 300;
-  camera.rotation.y = Math.PI / 2;
+  camera.position.z = 1;
+  camera.position.y = 100;
+  //camera.rotation.x = Math.PI / 2;
+  
 
   const gridHelper = new THREE.GridHelper(100, 100);
   scene.add(gridHelper);
@@ -40,7 +41,6 @@ export const graphics = () => {
       wall.position.x = (-size / 2 + (size / 2) * i) * Math.ceil(1 - i / 3);
       wall.position.y = size / 4;
       wall.position.z = Math.ceil(1 - (3 - i) / 3) * size - (size / 2) * i;
-      console.log(wall.position.z);
       scene.add(wall);
     }
 
@@ -58,23 +58,22 @@ export const graphics = () => {
   scene.background = skyTexture;
 
   //Particle Effect
-
   let particles = Array();
 
   const particleGen = () => {
-    for (let i = 0; i < 200; i++) {
-      const geometry = new THREE.SphereGeometry(1, 24, 24);
+    for (let i = 0; i < 500; i++) {
+      const geometry = new THREE.SphereGeometry(.001, 24, 24);
       const material = new THREE.MeshBasicMaterial({ color: 0x2ec946 });
       const particle = {
         particle: new THREE.Mesh(geometry, material),
-        position: { x: 0, y: 0, z: 0 },
+        coords: { x: 0, y: 0, z: 0 },
       };
 
-      const x = THREE.MathUtils.randFloatSpread(100);
-      const y = 100 + THREE.MathUtils.randFloatSpread(100);
-      const z = THREE.MathUtils.randFloatSpread(100);
+      const x = THREE.MathUtils.randFloatSpread(200);
+      const y = 100.5 + THREE.MathUtils.randFloatSpread(2);
+      const z = 0;
       particle.particle.position.set(x, y, z);
-      particle.position = (x, y, z);
+      particle.coords = {x, y, z};
 
       scene.add(particle.particle);
       particles.push(particle);
@@ -84,13 +83,39 @@ export const graphics = () => {
   particleGen();
 
   const particleEffect = () => {
-    particles.forEach(
-      (each) => (each.particle.position.x = THREE.MathUtils.randFloatSpread(100))
-    );
-    particles.forEach(
-      (each) => (each.particle.position.z = THREE.MathUtils.randFloatSpread(100))
-    );
+    particles.forEach(function(particle){
+      particle.coords.x = particle.coords.x + .001; 
+      particle.particle.position.x = 1.5 * Math.cos(particle.coords.x);
+    });
+    particles.forEach(function(particle){
+      particle.coords.z = particle.coords.z + .001; 
+      particle.particle.position.z = .01 * Math.cos(particle.coords.z);
+    });
   };
+
+  //Text 
+  // const tLoader = new THREE.FontLoader(); 
+  
+  // tLoader.load('../fonts/Norse_Regular.json', function (font) {
+  //   const tGeometry = {
+  //     font: font,
+  //     size: 80,
+  //     height: 5,
+  //     curveSegments: 12,
+  //     bevelEnabled: true,
+  //     bevelThickness: 10,
+  //     bevelSize: 8,
+  //     bevelOffset: 0,
+  //     bevelSegments: 5
+  //   };
+  //   let textGeometry = new THREE.TextGeometry('Odin\'s Eye Black Smithing', tGeometry);
+  //   let textMat = new THREE.MeshBasicMaterial({color: 0x2ec946});
+
+  //   let text = new THREE.Mesh(textGeometry, textMat);
+
+  //   text.position.set(0, 0, 0); 
+  //   scene.add(text);
+  // });
 
   //Move Camera
   const moveCamera = () => {
@@ -99,14 +124,16 @@ export const graphics = () => {
   };
   document.body.onscroll = moveCamera;
 
-  const controls = new OrbitControls(camera, renderer.domElement);
+  
+  //const controls = new OrbitControls(camera, renderer.domElement);
+
   // animate
   const animate = () => {
     requestAnimationFrame(animate);
 
     //controls
-    controls.update();
-    //particleEffect();
+    //controls.update();
+    particleEffect();
 
     renderer.render(scene, camera);
   };
