@@ -93,7 +93,7 @@ export const graphics = () => {
     });
     let t = window.scrollY;
     particles.forEach(function(particle){
-      particle.particle.position.y = particle.coords.y - (t * .15);
+      particle.particle.position.y = particle.coords.y - (t * .09);
     });
   };
 
@@ -122,11 +122,19 @@ export const graphics = () => {
   // });
 
   //Move Camera
+  let prevScroll = 0; // previous scroll position of camera to determine scroll direction 
+  let scrollBreak = 0; 
   const moveCamera = () => {
     const t = window.scrollY;
-    camera.position.y = camera.position.y > 10 ? 100 - (t * .09):  camera.position.y;
-    camera.rotation.y = camera.position.y <= 10 ? 0 - (t * .003):  camera.rotation.y;
-    console.log(t);
+
+    camera.position.y = camera.position.y > 10 ? 100 - (t * .09) :  camera.position.y;
+    
+    scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak; 
+    camera.rotation.y = (camera.position.y <= 10) ? 0 - (t * .003): camera.rotation.y;
+
+    camera.position.y = (camera.position.y <= 10 && t < scrollBreak) ? 100  - (t * .09) :  camera.position.y;
+
+    prevScroll = t; 
   };
   
   //const controls = new OrbitControls(camera, renderer.domElement);
