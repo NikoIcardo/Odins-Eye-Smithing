@@ -91,6 +91,10 @@ export const graphics = () => {
       particle.coords.z = particle.coords.z + .001; 
       particle.particle.position.z = .01 * Math.cos(particle.coords.z);
     });
+    let t = window.scrollY;
+    particles.forEach(function(particle){
+      particle.particle.position.y = particle.coords.y - (t * .15);
+    });
   };
 
   //Text 
@@ -119,17 +123,18 @@ export const graphics = () => {
 
   //Move Camera
   const moveCamera = () => {
-    const t = document.body.getBoundingClientRect().top;
-    camera.rotation.y = camera.rotation.y - t * 1;
+    const t = window.scrollY;
+    camera.position.y = camera.position.y > 10 ? 100 - (t * .09):  camera.position.y;
+    camera.rotation.y = camera.position.y <= 10 ? 0 - (t * .003):  camera.rotation.y;
+    console.log(t);
   };
-  document.body.onscroll = moveCamera;
-
   
   //const controls = new OrbitControls(camera, renderer.domElement);
 
   // animate
   const animate = () => {
     requestAnimationFrame(animate);
+    moveCamera();
 
     //controls
     //controls.update();

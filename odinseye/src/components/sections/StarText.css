@@ -1,0 +1,11 @@
+.starText {
+  color: #04ff82;
+  grid-column: 2 / span 4;
+  text-align: center;
+  font-size: 32px;
+  text-shadow:
+  0 0 5px #83ccaef6, 
+  0 3px 5px #83ccaef6, 
+  0 -3px 5px #83ccaef6;
+  margin-bottom: 100px;
+}
