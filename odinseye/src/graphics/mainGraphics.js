@@ -82,18 +82,30 @@ export const graphics = () => {
 
   particleGen();
 
+  //particle motion
   const particleEffect = () => {
+
+    //particle x motion
     particles.forEach(function(particle){
       particle.coords.x = particle.coords.x + .001; 
       particle.particle.position.x = 1.5 * Math.cos(particle.coords.x);
     });
+
+    //particle z motion
     particles.forEach(function(particle){
       particle.coords.z = particle.coords.z + .001; 
       particle.particle.position.z = .01 * Math.cos(particle.coords.z);
     });
+
+    //particle scroll with camera
     let t = window.scrollY;
+    let scrollBreak = 0;
     particles.forEach(function(particle){
-      particle.particle.position.y = particle.coords.y - (t * .09);
+      particle.particle.position.y = camera.position.y > 10 ? particle.coords.y - (t * .09) : particle.particle.position.y;
+
+      scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak;
+
+      particle.particle.position.y = (camera.position.y <= 10 && t < scrollBreak) ? particle.coords.y - (t * .09) :  particle.particle.position.y;
     });
   };
 
@@ -121,8 +133,7 @@ export const graphics = () => {
   //   scene.add(text);
   // });
 
-  //Move Camera
-  let prevScroll = 0; // previous scroll position of camera to determine scroll direction 
+  //Move Camera 
   let scrollBreak = 0; 
   const moveCamera = () => {
     const t = window.scrollY;
@@ -132,11 +143,10 @@ export const graphics = () => {
     scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak; 
     camera.rotation.y = (camera.position.y <= 10) ? 0 - (t * .003): camera.rotation.y;
 
-    camera.position.y = (camera.position.y <= 10 && t < scrollBreak) ? 100  - (t * .09) :  camera.position.y;
-
-    prevScroll = t; 
+    camera.position.y = (camera.position.y <= 10 && t < scrollBreak) ? 100  - (t * .09) :  camera.position.y; 
   };
   
+
   //const controls = new OrbitControls(camera, renderer.domElement);
 
   // animate
