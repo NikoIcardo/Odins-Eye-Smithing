@@ -106,6 +106,7 @@ export const graphics = () => {
       scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak;
 
       particle.particle.position.y = (camera.position.y <= 10 && t < scrollBreak) ? particle.coords.y - (t * .09) :  particle.particle.position.y;
+      
     });
   };
 
@@ -141,7 +142,7 @@ export const graphics = () => {
     camera.position.y = camera.position.y > 10 ? 100 - (t * .09) :  camera.position.y;
     
     scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak; 
-    camera.rotation.y = (camera.position.y <= 10) ? 0 - (t * .003): camera.rotation.y;
+    camera.rotation.y = (camera.position.y <= 10) ? 3 - (t * .003): 0;
 
     camera.position.y = (camera.position.y <= 10 && t < scrollBreak) ? 100  - (t * .09) :  camera.position.y; 
   };
