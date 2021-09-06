@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export const graphics = () => {
   const scene = new THREE.Scene();
@@ -20,7 +20,6 @@ export const graphics = () => {
   camera.position.z = 1;
   camera.position.y = 100;
   //camera.rotation.x = Math.PI / 2;
-  
 
   const gridHelper = new THREE.GridHelper(100, 100);
   scene.add(gridHelper);
@@ -30,7 +29,7 @@ export const graphics = () => {
 
   //Structure
   const addStructure = (size) => {
-    const wallTexture = new THREE.TextureLoader().load('castle_wall.jpg');
+    const wallTexture = new THREE.TextureLoader().load("castle_wall.jpg");
     let geometry = new THREE.BoxGeometry(size, 1, size / 2);
     let material = new THREE.MeshBasicMaterial({ map: wallTexture });
 
@@ -44,7 +43,7 @@ export const graphics = () => {
       scene.add(wall);
     }
 
-    const floorTexture = new THREE.TextureLoader().load('floor.jpg');
+    const floorTexture = new THREE.TextureLoader().load("floor.jpg");
     geometry = new THREE.BoxGeometry(size, 1, size);
     material = new THREE.MeshBasicMaterial({ map: floorTexture });
     const floor = new THREE.Mesh(geometry, material);
@@ -54,7 +53,7 @@ export const graphics = () => {
   addStructure(50);
 
   //sky
-  const skyTexture = new THREE.TextureLoader().load('sky.jpg');
+  const skyTexture = new THREE.TextureLoader().load("sky.jpg");
   scene.background = skyTexture;
 
   //Particle Effect
@@ -62,7 +61,7 @@ export const graphics = () => {
 
   const particleGen = () => {
     for (let i = 0; i < 500; i++) {
-      const geometry = new THREE.SphereGeometry(.001, 24, 24);
+      const geometry = new THREE.SphereGeometry(0.001, 24, 24);
       const material = new THREE.MeshBasicMaterial({ color: 0x2ec946 });
       const particle = {
         particle: new THREE.Mesh(geometry, material),
@@ -73,7 +72,7 @@ export const graphics = () => {
       const y = 100.5 + THREE.MathUtils.randFloatSpread(2);
       const z = 0;
       particle.particle.position.set(x, y, z);
-      particle.coords = {x, y, z};
+      particle.coords = { x, y, z };
 
       scene.add(particle.particle);
       particles.push(particle);
@@ -84,35 +83,40 @@ export const graphics = () => {
 
   //particle motion
   const particleEffect = () => {
-
     //particle x motion
-    particles.forEach(function(particle){
-      particle.coords.x = particle.coords.x + .001; 
+    particles.forEach(function (particle) {
+      particle.coords.x = particle.coords.x + 0.001;
       particle.particle.position.x = 1.5 * Math.cos(particle.coords.x);
     });
 
     //particle z motion
-    particles.forEach(function(particle){
-      particle.coords.z = particle.coords.z + .001; 
-      particle.particle.position.z = .01 * Math.cos(particle.coords.z);
+    particles.forEach(function (particle) {
+      particle.coords.z = particle.coords.z + 0.001;
+      particle.particle.position.z = 0.01 * Math.cos(particle.coords.z);
     });
 
     //particle scroll with camera
     let t = window.scrollY;
     let scrollBreak = 0;
-    particles.forEach(function(particle){
-      particle.particle.position.y = camera.position.y > 10 ? particle.coords.y - (t * .09) : particle.particle.position.y;
+    particles.forEach(function (particle) {
+      particle.particle.position.y =
+        camera.position.y > 10
+          ? particle.coords.y - t * 0.09
+          : particle.particle.position.y;
 
-      scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak;
+      scrollBreak =
+        camera.position.y <= 10 && scrollBreak === 0 ? t : scrollBreak;
 
-      particle.particle.position.y = (camera.position.y <= 10 && t < scrollBreak) ? particle.coords.y - (t * .09) :  particle.particle.position.y;
-      
+      particle.particle.position.y =
+        camera.position.y <= 10 && t < scrollBreak
+          ? particle.coords.y - t * 0.09
+          : particle.particle.position.y;
     });
   };
 
-  //Text 
-  // const tLoader = new THREE.FontLoader(); 
-  
+  //Text
+  // const tLoader = new THREE.FontLoader();
+
   // tLoader.load('../fonts/Norse_Regular.json', function (font) {
   //   const tGeometry = {
   //     font: font,
@@ -130,25 +134,29 @@ export const graphics = () => {
 
   //   let text = new THREE.Mesh(textGeometry, textMat);
 
-  //   text.position.set(0, 0, 0); 
+  //   text.position.set(0, 0, 0);
   //   scene.add(text);
   // });
 
-  //Move Camera 
-  let scrollBreak = 0; 
+  //Move Camera
+  let scrollBreak = 0;
   const moveCamera = () => {
     const t = window.scrollY;
 
-    camera.position.y = camera.position.y > 10 ? 100 - (t * .09) :  camera.position.y;
-    
-    scrollBreak = (camera.position.y <= 10 && scrollBreak === 0) ? t : scrollBreak; 
-    camera.rotation.y = (camera.position.y <= 10) ? 3 - (t * .003): 0;
+    camera.position.y =
+      camera.position.y > 10 ? 100 - t * 0.09 : camera.position.y;
 
-    camera.position.y = (camera.position.y <= 10 && t < scrollBreak) ? 100  - (t * .09) :  camera.position.y; 
+    scrollBreak =
+      camera.position.y <= 10 && scrollBreak === 0 ? t : scrollBreak;
+    camera.rotation.y = camera.position.y <= 10 ? 3 - t * 0.003 : 0;
+
+    camera.position.y =
+      camera.position.y <= 10 && t < scrollBreak
+        ? 100 - t * 0.09
+        : camera.position.y;
   };
-  
 
-  //const controls = new OrbitControls(camera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
 
   // animate
   const animate = () => {
@@ -156,11 +164,11 @@ export const graphics = () => {
     moveCamera();
 
     //controls
-    //controls.update();
+    controls.update();
     particleEffect();
 
     renderer.render(scene, camera);
   };
 
-  animate();
+  animate(); 
 };

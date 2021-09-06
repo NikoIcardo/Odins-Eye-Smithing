@@ -8,6 +8,7 @@ import StarText from './components/sections/StarText';
 import WallText from './components/sections/WallText';
 import FireAudio from './components/util/FireAudio';
 
+
 function App() {
   graphics();
 
