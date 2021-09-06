@@ -5,7 +5,6 @@ const FireAudio = () => {
   const fireRef = useRef();
 
   useEffect(() => {
-    console.log('help');
     fireRef.current.muted = false;
     fireRef.current.autoplay = true;
     fireRef.current.pause();
