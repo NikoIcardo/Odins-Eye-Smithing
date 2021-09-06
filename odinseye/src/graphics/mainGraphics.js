@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import { contentWall } from './contentWall'; 
+
 //setup
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
@@ -125,30 +127,30 @@ const particleEffect = () => {
   });
 };
 
+
+
 export const graphics = () => {
-  
+  const wallSize = 50;
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight);
 
-  //Structure
-  addStructure(50);
+  addStructure(wallSize);
 
-  //sky
-  const skyTexture = new THREE.TextureLoader().load("sky.jpg");
-  scene.background = skyTexture;
+  const sky = new THREE.TextureLoader().load("sky.jpg");
+  scene.background = sky;
 
-  //Particle Effect
-  particleGen();
+  particleGen(); 
 
-  //const controls = new OrbitControls(camera, renderer.domElement);
+  const wall = contentWall(50, {x: 0, y: wallSize /4 , z: (-wallSize / 2) + .51}, 'fire.png');
+  scene.add(wall);
 
-  // animate
+  const controls = new OrbitControls( camera, renderer.domElement );
   const animate = () => {
     requestAnimationFrame(animate);
     
     moveCamera();
 
-    //controls.update();
+    controls.update();
 
     particleEffect();
 
