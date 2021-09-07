@@ -27,18 +27,22 @@ camera.position.y = 100;
 
 //Move Camera
 let scrollBreak = 0;
+let cameraHeight = 18; 
 const moveCamera = () => {
   const t = window.scrollY;
 
   camera.position.y =
-    camera.position.y > 10 ? 100 - t * 0.09 : camera.position.y;
+    camera.position.y > cameraHeight ? 100 - t * 0.09 :  cameraHeight;
 
   scrollBreak =
-    camera.position.y <= 10 && scrollBreak === 0 ? t : scrollBreak;
-  camera.rotation.y = camera.position.y <= 10 ? 3 - t * 0.003 : 0;
+    camera.position.y === cameraHeight && scrollBreak === 0 ? t : scrollBreak;
+  camera.rotation.y = camera.position.y === cameraHeight ? 0 + (scrollBreak - t * 0.003)  : 0;
+  //console.log(camera.rotation.y);
+  //console.log('scroll ' + scrollBreak);
+  //console.log('camera y ' + camera.position.y);
 
   camera.position.y =
-    camera.position.y <= 10 && t < scrollBreak
+    camera.position.y === cameraHeight && t < scrollBreak
       ? 100 - t * 0.09
       : camera.position.y;
 };
@@ -141,16 +145,18 @@ export const graphics = () => {
 
   particleGen(); 
 
-  const wall = contentWall(50, {x: 0, y: wallSize /4 , z: (-wallSize / 2) + .51}, 'fire.png');
+  const {wall, planks} = contentWall(50, {x: 0, y: wallSize /4 , z: (-wallSize / 2) + .51}, 'fire.png');
   scene.add(wall);
+  planks.forEach(plank => scene.add(plank));
+  console.log(planks);
 
-  const controls = new OrbitControls( camera, renderer.domElement );
+  //const controls = new OrbitControls( camera, renderer.domElement );
   const animate = () => {
     requestAnimationFrame(animate);
     
     moveCamera();
 
-    controls.update();
+    //controls.update();
 
     particleEffect();
 
