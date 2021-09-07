@@ -36,10 +36,10 @@ const moveCamera = () => {
 
   scrollBreak =
     camera.position.y === cameraHeight && scrollBreak === 0 ? t : scrollBreak;
-  camera.rotation.y = camera.position.y === cameraHeight ? 0 + (scrollBreak - t * 0.003)  : 0;
-  //console.log(camera.rotation.y);
-  //console.log('scroll ' + scrollBreak);
-  //console.log('camera y ' + camera.position.y);
+  camera.rotation.y = camera.position.y === cameraHeight ? ((scrollBreak - t) * 0.001) : 0;
+  console.log(camera.rotation.y);
+  console.log('scroll ' + scrollBreak);
+  console.log('camera y ' + camera.position.y);
 
   camera.position.y =
     camera.position.y === cameraHeight && t < scrollBreak
