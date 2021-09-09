@@ -1,4 +1,5 @@
 import * as THREE from "three";
+
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { contentWall } from './contentWall'; 
@@ -37,9 +38,6 @@ const moveCamera = () => {
   scrollBreak =
     camera.position.y === cameraHeight && scrollBreak === 0 ? t : scrollBreak;
   camera.rotation.y = camera.position.y === cameraHeight ? ((scrollBreak - t) * 0.001) : 0;
-  console.log(camera.rotation.y);
-  console.log('scroll ' + scrollBreak);
-  console.log('camera y ' + camera.position.y);
 
   camera.position.y =
     camera.position.y === cameraHeight && t < scrollBreak
@@ -131,7 +129,22 @@ const particleEffect = () => {
   });
 };
 
+const findGrid = (wallSize, partitions) => {
 
+  const nearest_square_root = Math.ceil(Math.sqrt(partitions)); 
+
+  const unit_Size = (wallSize / partitions); 
+
+  let grid = Array();
+
+  for (let j = 0; j < nearest_square_root; j++) {
+    for(let i = 0; i < nearest_square_root; i++) {
+      grid.push({i: (i * unit_Size) - (wallSize / 2) + wallSize / partitions, j: (nearest_square_root - j) * unit_Size / 2 + wallSize / 12}); 
+    }
+  }
+
+  return grid; 
+};
 
 export const graphics = () => {
   const wallSize = 50;
@@ -145,10 +158,25 @@ export const graphics = () => {
 
   particleGen(); 
 
-  const {wall, planks} = contentWall(50, {x: 0, y: wallSize /4 , z: (-wallSize / 2) + .51}, 'fire.png');
-  scene.add(wall);
-  planks.forEach(plank => scene.add(plank));
-  console.log(planks);
+  const inventory = ['./inventory/halberd.jpg', './inventory/sword.jpg', './inventory/sword2.jpg', './inventory/sword2.jpg', './inventory/sword2.jpg'];
+
+  
+  const grid1 = findGrid(wallSize, inventory.length);
+  console.log(grid1);
+
+  inventory.forEach(item => {
+    
+    const index = inventory.indexOf(item);
+
+    const {i, j} = grid1[index];   
+    
+    const {wall, planks} = contentWall(wallSize / inventory.length, {x: i, y: j, z: (-wallSize / 2) + .51}, {x: Math.PI / 2, y: 0, z: 0}, inventory[index]); 
+    
+    scene.add(wall);
+    console.log(wall.position);
+
+    planks.forEach(plank => scene.add(plank));
+  }); 
 
   //const controls = new OrbitControls( camera, renderer.domElement );
   const animate = () => {

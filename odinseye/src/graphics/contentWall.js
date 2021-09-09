@@ -1,16 +1,19 @@
 import * as THREE from "three";
 
-export const contentWall = (size, position, content) => {
+export const contentWall = (size, position, rotation, content) => {
 
   const boardSize = size * .8; 
 
-  const wallTexture = new THREE.TextureLoader().load('sign.jpg');
+  const wallTexture = new THREE.TextureLoader().load(content);
   let geometry = new THREE.BoxGeometry(boardSize, 0, boardSize / 2); 
   let material = new THREE.MeshBasicMaterial({map: wallTexture}); 
 
   const wall = new THREE.Mesh(geometry, material); 
 
-  wall.rotation.x = Math.PI / 2;
+  wall.rotation.x = rotation.x;
+  wall.rotation.y = rotation.y; 
+  wall.rotation.z = rotation.z; 
+
   wall.position.x = position.x; 
   wall.position.y = position.y;
   wall.position.z = position.z;
@@ -28,8 +31,10 @@ export const contentWall = (size, position, content) => {
     let plankMaterial = new THREE.MeshBasicMaterial({map: plankTexture}); 
 
     const plank = new THREE.Mesh(plankGeometry, plankMaterial);
-    plank.rotation.x = Math.PI / 2;
-    plank.position.x = i < 2 ? (position.x + ((i + 1) % 2) * boardSize / 2): -1 * (position.x + ((i + 1) % 2) * boardSize / 2);
+    plank.rotation.x = rotation.x;
+    plank.rotation.y = rotation.y; 
+    plank.rotation.z = rotation.z; 
+    plank.position.x = i < 2 ? (position.x + ((i + 1) % 2) * boardSize / 2):(position.x - ((i + 1) % 2) * boardSize / 2);
     plank.position.y = i < 2 ? position.y + ((i % 2) * boardSize / 4): position.y - ((i % 2) * boardSize / 4);
     plank.position.z = position.z;
 
