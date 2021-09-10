@@ -1,14 +1,10 @@
-export const findGrid = (wallSize, partitions, reducer) => {
-
-  const nearest_square_root = Math.ceil(Math.sqrt(partitions)); 
+export const findGrid = (wallSize, partitions, reducer, nearest_square_root) => {
 
   const unit_Size = (wallSize / nearest_square_root)
 
-  console.log('part ' + partitions + ' nearest square ' + nearest_square_root);
-
   // Shifting the grid to center the objects hanging on it. 
-  const shiftI = (wallSize / partitions) * reducer - (wallSize / 2);
-  const shiftJ = ((wallSize / partitions) * reducer + (wallSize / 2) / 2);
+  const shiftI = (wallSize / (nearest_square_root + 2)) * reducer - (wallSize / 2);
+  const shiftJ = ((wallSize /( nearest_square_root + 2)) * reducer + (wallSize / 2) / 2);
 
   let grid = Array();
 

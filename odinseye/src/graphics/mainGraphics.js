@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { addStructure } from './addStructure';
-import { contentWall } from './contentWall'; 
+import { contentWall } from './contentWall';
 import { findGrid } from './findGrid';
 
 //setup
@@ -30,16 +30,17 @@ camera.position.y = 100;
 
 //Move Camera
 let scrollBreak = 0;
-let cameraHeight = 18; 
+let cameraHeight = 18;
 const moveCamera = () => {
   const t = window.scrollY;
 
   camera.position.y =
-    camera.position.y > cameraHeight ? 100 - t * 0.09 :  cameraHeight;
+    camera.position.y > cameraHeight ? 100 - t * 0.09 : cameraHeight;
 
   scrollBreak =
     camera.position.y === cameraHeight && scrollBreak === 0 ? t : scrollBreak;
-  camera.rotation.y = camera.position.y === cameraHeight ? ((scrollBreak - t) * 0.001) : 0;
+  camera.rotation.y =
+    camera.position.y === cameraHeight ? (scrollBreak - t) * 0.001 : 0;
 
   camera.position.y =
     camera.position.y === cameraHeight && t < scrollBreak
@@ -47,8 +48,8 @@ const moveCamera = () => {
       : camera.position.y;
 };
 
-//Particles 
-//ParticleGen 
+//Particles
+//ParticleGen
 let particles = Array();
 const particleGen = () => {
   for (let i = 0; i < 500; i++) {
@@ -108,7 +109,6 @@ const particleEffect = () => {
   });
 };
 
-
 export const graphics = () => {
   const wallSize = 50;
 
@@ -116,42 +116,57 @@ export const graphics = () => {
   scene.add(ambientLight);
 
   let forge = addStructure(wallSize);
-  forge.forEach(item => {
+  forge.forEach((item) => {
     scene.add(item);
     console.log(item.position);
   });
 
-
-  const sky = new THREE.TextureLoader().load("sky.jpg");
+  const sky = new THREE.TextureLoader().load('sky.jpg');
   scene.background = sky;
 
-  particleGen(); 
+  particleGen();
 
-  const inventory = ['./inventory/halberd.jpg', './inventory/sword.jpg', './inventory/sword2.jpg', './inventory/dagger.jpg', './inventory/battleaxe.jpg'];
+  const inventory = [
+    './inventory/halberd.jpg',
+    './inventory/sword.jpg',
+    './inventory/sword2.jpg',
+    './inventory/dagger.jpg',
+    './inventory/battleaxe.jpg',
+    './inventory/hatchet.jpg',
+    './inventory/rapier.png',
+    './inventory/mace.jpg', 
+    './inventory/spartan laser.png',
+  ];
 
-  const reducer = .8; 
+  const reducer = 0.8;
+  const nearest_square_root = Math.ceil(Math.sqrt(inventory.length)); 
 
-  const grid1 = findGrid(wallSize, inventory.length, reducer);
+  const grid1 = findGrid(wallSize, inventory.length, reducer, nearest_square_root);
   console.log(grid1);
 
-  inventory.forEach(item => {
-    
+  inventory.forEach((item) => {
     const index = inventory.indexOf(item);
 
-    const {i, j} = grid1[index];   
-    
-    const {wall, planks} = contentWall(wallSize / inventory.length, {x: i, y: j, z: (-wallSize / 2) + .51}, {x: Math.PI / 2, y: 0, z: 0}, inventory[index], reducer); 
-    
+    const { i, j } = grid1[index];
+
+    const { wall, planks } = contentWall(
+      wallSize / (nearest_square_root + 2),
+      { x: i, y: j, z: -wallSize / 2 + 0.51 },
+      { x: Math.PI / 2, y: 0, z: 0 },
+      inventory[index],
+      reducer
+    );
+
     scene.add(wall);
     console.log(wall.position);
 
-    planks.forEach(plank => scene.add(plank));
-  }); 
+    planks.forEach((plank) => scene.add(plank));
+  });
 
   //const controls = new OrbitControls( camera, renderer.domElement );
   const animate = () => {
     requestAnimationFrame(animate);
-    
+
     moveCamera();
 
     //controls.update();
@@ -161,5 +176,5 @@ export const graphics = () => {
     renderer.render(scene, camera);
   };
 
-  animate(); 
+  animate();
 };
