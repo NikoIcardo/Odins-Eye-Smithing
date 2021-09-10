@@ -1,8 +1,9 @@
 import * as THREE from "three";
 
-export const contentWall = (size, position, rotation, content) => {
+export const contentWall = (size, position, rotation, content, reducer) => {
 
-  const boardSize = size * .8; 
+  const boardSize = size * reducer; 
+  position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
 
   const wallTexture = new THREE.TextureLoader().load(content);
   let geometry = new THREE.BoxGeometry(boardSize, 0, boardSize / 2); 
@@ -21,6 +22,7 @@ export const contentWall = (size, position, rotation, content) => {
   let plankLength = 0; 
   let plankWidth = 0; 
   let planks = Array();
+  
   for(let i = 0; i < 4; i++){
 
     plankLength = (boardSize) * (i % 2) > 0 ? (boardSize) * (i % 2) + boardSize * .05: boardSize * .05; 

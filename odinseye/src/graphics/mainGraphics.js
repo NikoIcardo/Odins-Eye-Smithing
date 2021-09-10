@@ -2,7 +2,9 @@ import * as THREE from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import { addStructure } from './addStructure';
 import { contentWall } from './contentWall'; 
+import { findGrid } from './findGrid';
 
 //setup
 const scene = new THREE.Scene();
@@ -43,29 +45,6 @@ const moveCamera = () => {
     camera.position.y === cameraHeight && t < scrollBreak
       ? 100 - t * 0.09
       : camera.position.y;
-};
-
-//Add the Smithy.
-const addStructure = (size) => {
-  const wallTexture = new THREE.TextureLoader().load("castle_wall.jpg");
-  let geometry = new THREE.BoxGeometry(size, 1, size / 2);
-  let material = new THREE.MeshBasicMaterial({ map: wallTexture });
-
-  for (let i = 0; i < 4; i++) {
-    const wall = new THREE.Mesh(geometry, material);
-    wall.rotation.x = Math.PI / 2;
-    wall.rotation.z = (Math.PI / 2) * (i + 1);
-    wall.position.x = (-size / 2 + (size / 2) * i) * Math.ceil(1 - i / 3);
-    wall.position.y = size / 4;
-    wall.position.z = Math.ceil(1 - (3 - i) / 3) * size - (size / 2) * i;
-    scene.add(wall);
-  }
-
-  const floorTexture = new THREE.TextureLoader().load("floor.jpg");
-  geometry = new THREE.BoxGeometry(size, 1, size);
-  material = new THREE.MeshBasicMaterial({ map: floorTexture });
-  const floor = new THREE.Mesh(geometry, material);
-  scene.add(floor);
 };
 
 //Particles 
@@ -129,39 +108,30 @@ const particleEffect = () => {
   });
 };
 
-const findGrid = (wallSize, partitions) => {
-
-  const nearest_square_root = Math.ceil(Math.sqrt(partitions)); 
-
-  const unit_Size = (wallSize / partitions); 
-
-  let grid = Array();
-
-  for (let j = 0; j < nearest_square_root; j++) {
-    for(let i = 0; i < nearest_square_root; i++) {
-      grid.push({i: (i * unit_Size) - (wallSize / 2) + wallSize / partitions, j: (nearest_square_root - j) * unit_Size / 2 + wallSize / 12}); 
-    }
-  }
-
-  return grid; 
-};
 
 export const graphics = () => {
   const wallSize = 50;
+
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight);
 
-  addStructure(wallSize);
+  let forge = addStructure(wallSize);
+  forge.forEach(item => {
+    scene.add(item);
+    console.log(item.position);
+  });
+
 
   const sky = new THREE.TextureLoader().load("sky.jpg");
   scene.background = sky;
 
   particleGen(); 
 
-  const inventory = ['./inventory/halberd.jpg', './inventory/sword.jpg', './inventory/sword2.jpg', './inventory/sword2.jpg', './inventory/sword2.jpg'];
+  const inventory = ['./inventory/halberd.jpg', './inventory/sword.jpg', './inventory/sword2.jpg', './inventory/dagger.jpg', './inventory/battleaxe.jpg'];
 
-  
-  const grid1 = findGrid(wallSize, inventory.length);
+  const reducer = .8; 
+
+  const grid1 = findGrid(wallSize, inventory.length, reducer);
   console.log(grid1);
 
   inventory.forEach(item => {
@@ -170,7 +140,7 @@ export const graphics = () => {
 
     const {i, j} = grid1[index];   
     
-    const {wall, planks} = contentWall(wallSize / inventory.length, {x: i, y: j, z: (-wallSize / 2) + .51}, {x: Math.PI / 2, y: 0, z: 0}, inventory[index]); 
+    const {wall, planks} = contentWall(wallSize / inventory.length, {x: i, y: j, z: (-wallSize / 2) + .51}, {x: Math.PI / 2, y: 0, z: 0}, inventory[index], reducer); 
     
     scene.add(wall);
     console.log(wall.position);
