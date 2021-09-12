@@ -3,7 +3,7 @@ import * as THREE from "three";
 export const contentWall = (size, position, rotation, content, reducer) => {
 
   const boardSize = size * reducer; 
-  position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
+  //position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
 
   const wallTexture = new THREE.TextureLoader().load(content);
   let geometry = new THREE.BoxGeometry(boardSize, 0, boardSize / 2); 
