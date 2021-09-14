@@ -7,7 +7,6 @@ import { contentWall } from './contentWall';
 import { findGrid } from './findGrid';
 import { particleGen, particleEffect } from './particles';
 
-
 //setup
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
@@ -50,10 +49,6 @@ const moveCamera = () => {
       : camera.position.y;
 };
 
-//Particles
-//ParticleGen
-
-
 export const graphics = () => {
   const wallSize = 50;
 
@@ -86,7 +81,7 @@ export const graphics = () => {
   const nearest_square_root = Math.ceil(Math.sqrt(inventory.length)); 
 
   const grid1 = findGrid(wallSize, inventory.length, reducer, nearest_square_root);
-  console.log(grid1);
+  const contentWalls = Array();
 
   inventory.forEach((item) => {
     const index = inventory.indexOf(item);
@@ -102,18 +97,19 @@ export const graphics = () => {
     );
 
     scene.add(wall);
-
-    console.log(wall.position);
+    contentWalls.push(wall);
 
     planks.forEach((plank) => scene.add(plank));
   });
-
+ 
   //const controls = new OrbitControls( camera, renderer.domElement );
+  
   const animate = () => {
+     
     requestAnimationFrame(animate);
 
     moveCamera();
-
+    
     //controls.update();
 
     particleEffect(particles, camera);
@@ -122,4 +118,49 @@ export const graphics = () => {
   };
 
   animate();
+
+  //raycaster
+  const raycaster = new THREE.Raycaster();  
+  const mouse = new THREE.Vector2();
+
+  let intersects = null; 
+  let wallMaterial = null; 
+
+  window.addEventListener('mousemove', event => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1; 
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    if(raycaster.intersectObjects(contentWalls).length < 1 && wallMaterial) {
+      intersects[0].object.material = wallMaterial; 
+      wallMaterial = null; 
+    }
+
+    intersects = raycaster.intersectObjects(contentWalls); 
+    if(intersects.length > 0) {
+      wallMaterial = wallMaterial === null ? intersects[0].object.material : wallMaterial;
+      console.log(wallMaterial); 
+      intersects[0].object.material = new THREE.MeshBasicMaterial({color: 0x32a852});
+    }  
+  });
+
+
+  const raycaster1 = new THREE.Raycaster();
+  const mouse1 = new THREE.Vector2();
+
+  window.addEventListener('click', event => {
+    mouse1.x = (event.clientX / window.innerWidth) * 2 - 1; 
+    mouse1.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster1.setFromCamera(mouse1, camera); 
+    const intersects = raycaster1.intersectObjects(contentWalls).length > 0 ? raycaster1.intersectObjects(contentWalls): 'false';
+  });
+
 };
+
+
+
+ 
+
+
