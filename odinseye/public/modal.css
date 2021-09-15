@@ -1,0 +1,20 @@
+.modal {
+  position: fixed; 
+  display: none;   
+  z-index: 100;
+  background: white; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 8px;
+  margin-left: 25%; 
+}
+
+.modal_content {
+  margin: 30% auto; 
+  padding: 20px; 
+}
+
+.close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}

@@ -19,6 +19,8 @@ export const contentWall = (size, position, rotation, content, reducer) => {
   wall.position.y = position.y;
   wall.position.z = position.z;
 
+  wall.userData = {picture: content};
+  console.log(wall.userData);
   let plankLength = 0; 
   let plankWidth = 0; 
   let planks = Array();

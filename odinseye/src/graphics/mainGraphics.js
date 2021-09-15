@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import React from 'react';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -140,23 +141,40 @@ export const graphics = () => {
     intersects = raycaster.intersectObjects(contentWalls); 
     if(intersects.length > 0) {
       wallMaterial = wallMaterial === null ? intersects[0].object.material : wallMaterial;
-      console.log(wallMaterial); 
       intersects[0].object.material = new THREE.MeshBasicMaterial({color: 0x32a852});
     }  
   });
 
 
+  //modal
+
+  const modal = document.getElementById('modal');
+
   const raycaster1 = new THREE.Raycaster();
   const mouse1 = new THREE.Vector2();
 
   window.addEventListener('click', event => {
+    if(modal.style.display !== 'none'){
+      modal.style.display = 'none'
+    }
     mouse1.x = (event.clientX / window.innerWidth) * 2 - 1; 
     mouse1.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster1.setFromCamera(mouse1, camera); 
-    const intersects = raycaster1.intersectObjects(contentWalls).length > 0 ? raycaster1.intersectObjects(contentWalls): 'false';
-  });
+    
+    const intersects1 =  raycaster1.intersectObjects(contentWalls);
 
+    if(intersects1.length  > 0){
+      console.log('im in');
+      
+      const image = intersects1[0].object.userData.picture;  
+
+      modal.style.display = "flex"; 
+
+      const content = document.getElementsByClassName('modal_content')[0]; 
+      content.innerHTML = `<img alt="item" src="${image}" height="200px" />`;
+    }
+  });
 };
 
 
