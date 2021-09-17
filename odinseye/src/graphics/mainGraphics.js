@@ -154,6 +154,7 @@ export const graphics = () => {
   const mouse1 = new THREE.Vector2();
 
   window.addEventListener('click', event => {
+
     if(modal.style.display !== 'none'){
       modal.style.display = 'none'
     }
@@ -165,7 +166,6 @@ export const graphics = () => {
     const intersects1 =  raycaster1.intersectObjects(contentWalls);
 
     if(intersects1.length  > 0){
-      console.log('im in');
       
       const image = intersects1[0].object.userData.picture;  
 
@@ -173,6 +173,7 @@ export const graphics = () => {
 
       const content = document.getElementsByClassName('modal_content')[0]; 
       content.innerHTML = `<img alt="item" src="${image}" height="200px" />`;
+      content.innerHTML += '<p> hello </p>'
     }
   });
 };

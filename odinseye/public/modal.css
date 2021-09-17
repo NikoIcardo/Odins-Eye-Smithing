@@ -1,15 +1,18 @@
 .modal {
   position: fixed; 
-  display: none;   
+  display: none; 
+  width: 70%; 
+  height: 70%;  
   z-index: 100;
   background: white; 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 8px;
-  margin-left: 25%; 
+  border-radius: 8px; 
+  margin-left: 15%; 
+  margin-right: 15%;
+  justify-content: flex-start;
 }
 
 .modal_content {
-  margin: 30% auto; 
   padding: 20px; 
 }
 
