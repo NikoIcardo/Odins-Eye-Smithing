@@ -81,7 +81,7 @@ export const graphics = () => {
 
     const { wall, planks } = contentWall(
       wallSize / (nearest_square_root + 2),
-      { x: i + (wallSize * .04), y: j, z: -wallSize / 2 + 0.51 },
+      { x: i, y: j, z: -wallSize / 2 + 0.51 },
       { x: Math.PI / 2, y: 0, z: 0 },
       reducer,
       inventory[index].photo,

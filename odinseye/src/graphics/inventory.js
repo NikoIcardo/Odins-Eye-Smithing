@@ -12,4 +12,7 @@ export const inventory = [
   { photo: './inventory/spartan laser.png', description: '' },
   { photo: './inventory/machete.jpg', description: '' },
   { photo: './inventory/hotdog.jpg', description: '' },
+  { photo: './inventory/hotdog.jpg', description: '' },
+  { photo: './inventory/hotdog.jpg', description: '' },
+  { photo: './inventory/hotdog.jpg', description: '' }
 ];
