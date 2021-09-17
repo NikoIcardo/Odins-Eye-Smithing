@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
-export const contentWall = (size, position, rotation, content, reducer) => {
+export const contentWall = (size, position, rotation, reducer, photo, description) => {
 
   const boardSize = size * reducer; 
   //position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
 
-  const wallTexture = new THREE.TextureLoader().load(content);
+  const wallTexture = new THREE.TextureLoader().load(photo);
   let geometry = new THREE.BoxGeometry(boardSize, 0, boardSize / 2); 
   let material = new THREE.MeshBasicMaterial({map: wallTexture}); 
 
@@ -19,7 +19,7 @@ export const contentWall = (size, position, rotation, content, reducer) => {
   wall.position.y = position.y;
   wall.position.z = position.z;
 
-  wall.userData = {picture: content};
+  wall.userData = {photo: photo, description: description};
   console.log(wall.userData);
   let plankLength = 0; 
   let plankWidth = 0; 

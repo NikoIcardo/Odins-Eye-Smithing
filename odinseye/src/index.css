@@ -33,7 +33,6 @@ main {
   width: 100vw; 
   display: grid; 
   grid-template-columns: repeat(6, 1fr);
-
 }
 
 html {

@@ -7,6 +7,7 @@ import { addStructure } from './addStructure';
 import { contentWall } from './contentWall';
 import { findGrid } from './findGrid';
 import { particleGen, particleEffect } from './particles';
+import { inventory } from './inventory';
 
 //setup
 const scene = new THREE.Scene();
@@ -66,19 +67,8 @@ export const graphics = () => {
 
   const particles = particleGen(scene);
 
-  const inventory = [
-    './inventory/halberd.jpg',
-    './inventory/sword.jpg',
-    './inventory/sword2.jpg',
-    './inventory/dagger.jpg',
-    './inventory/battleaxe.jpg',
-    './inventory/mace.jpg', 
-    './inventory/spartan laser.png',
-    './inventory/machete.jpg',
-    './inventory/hotdog.jpg'
-  ];
-
   const reducer = 0.8;
+
   const nearest_square_root = Math.ceil(Math.sqrt(inventory.length)); 
 
   const grid1 = findGrid(wallSize, inventory.length, reducer, nearest_square_root);
@@ -93,8 +83,9 @@ export const graphics = () => {
       wallSize / (nearest_square_root + 2),
       { x: i + (wallSize * .04), y: j, z: -wallSize / 2 + 0.51 },
       { x: Math.PI / 2, y: 0, z: 0 },
-      inventory[index],
-      reducer
+      reducer,
+      inventory[index].photo,
+      inventory[index].description
     );
 
     scene.add(wall);
@@ -167,13 +158,14 @@ export const graphics = () => {
 
     if(intersects1.length  > 0){
       
-      const image = intersects1[0].object.userData.picture;  
+      const photo = intersects1[0].object.userData.photo;
+      const description = intersects1[0].object.userData.description;  
 
       modal.style.display = "flex"; 
 
       const content = document.getElementsByClassName('modal_content')[0]; 
-      content.innerHTML = `<img alt="item" src="${image}" height="200px" />`;
-      content.innerHTML += '<p> hello </p>'
+      content.innerHTML = `<img alt="item" src="${photo}"/>`;
+      content.innerHTML += `<p> ${description} </p>`;
     }
   });
 };
