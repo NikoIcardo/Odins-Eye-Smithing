@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export const contentWall = (size, position, rotation, reducer, photo, description) => {
+export const contentWall = (size, position, rotation, reducer = 0, orientation, photo, description = '') => {
 
   const boardSize = size * reducer; 
   //position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
@@ -35,12 +35,22 @@ export const contentWall = (size, position, rotation, reducer, photo, descriptio
     let plankMaterial = new THREE.MeshBasicMaterial({map: plankTexture}); 
 
     const plank = new THREE.Mesh(plankGeometry, plankMaterial);
+
     plank.rotation.x = rotation.x;
     plank.rotation.y = rotation.y; 
     plank.rotation.z = rotation.z; 
-    plank.position.x = i < 2 ? (position.x + ((i + 1) % 2) * boardSize / 2):(position.x - ((i + 1) % 2) * boardSize / 2);
-    plank.position.y = i < 2 ? position.y + ((i % 2) * boardSize / 4): position.y - ((i % 2) * boardSize / 4);
-    plank.position.z = position.z;
+
+    if(orientation === 'x') {
+      plank.position.x = i < 2 ? (position.x + ((i + 1) % 2) * boardSize / 2) : (position.x - ((i + 1) % 2) * boardSize / 2);
+      plank.position.y = i < 2 ? position.y + ((i % 2) * boardSize / 4) : position.y - ((i % 2) * boardSize / 4);
+      plank.position.z = position.z;
+    } else {
+      plank.position.z = i < 2 ? (position.z + ((i + 1) % 2) * boardSize / 2) : (position.z - ((i + 1) % 2) * boardSize / 2);
+      plank.position.y = i < 2 ? position.y + ((i % 2) * boardSize / 4) : position.y - ((i % 2) * boardSize / 4);
+      plank.position.x = position.x;
+    }
+
+    
 
     planks.push(plank);
   }

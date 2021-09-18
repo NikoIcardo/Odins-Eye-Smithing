@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import React from 'react';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -81,9 +80,10 @@ export const graphics = () => {
 
     const { wall, planks } = contentWall(
       wallSize / (nearest_square_root + 2),
-      { x: i, y: j, z: -wallSize / 2 + 0.51 },
-      { x: Math.PI / 2, y: 0, z: 0 },
+      { x: wallSize / 2 - 0.51 , y: j, z:i },
+      { x: Math.PI / 2, y: 0, z: Math.PI / 2},
       reducer,
+      'z',
       inventory[index].photo,
       inventory[index].description
     );
