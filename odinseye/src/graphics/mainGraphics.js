@@ -66,11 +66,17 @@ export const graphics = () => {
 
   const particles = particleGen(scene);
 
+  // inventory frames
   const reducer = 0.8;
 
-  const nearest_square_root = Math.ceil(Math.sqrt(inventory.length)); 
+  const nearest_square_root = Math.ceil(Math.sqrt(inventory.length));
 
-  const grid1 = findGrid(wallSize, inventory.length, reducer, nearest_square_root);
+  const grid1 = findGrid(
+    wallSize,
+    inventory.length,
+    reducer,
+    nearest_square_root
+  );
   const contentWalls = Array();
 
   inventory.forEach((item) => {
@@ -80,8 +86,8 @@ export const graphics = () => {
 
     const { wall, planks } = contentWall(
       wallSize / (nearest_square_root + 2),
-      { x: wallSize / 2 - 0.51 , y: j, z:i },
-      { x: Math.PI / 2, y: 0, z: Math.PI / 2},
+      { x: wallSize / 2 - 0.51, y: j, z: i },
+      { x: Math.PI / 2, y: 0, z: Math.PI / 2 },
       reducer,
       'z',
       inventory[index].photo,
@@ -93,15 +99,30 @@ export const graphics = () => {
 
     planks.forEach((plank) => scene.add(plank));
   });
- 
+
+  //Blog Wall
+  const image = './wall/papyrus.jpg';
+  const { wall, planks } = contentWall(
+    wallSize,
+    { x: 0, y: wallSize / 4, z: -wallSize / 2 + .51},
+    { x: Math.PI / 2, y: 0, z: 0},
+    reducer, 
+    'x', 
+    image,
+    'Hello'
+  );
+
+  scene.add(wall);
+  console.log(wall);
+  planks.forEach(plank => scene.add(plank));
+
   //const controls = new OrbitControls( camera, renderer.domElement );
-  
+
   const animate = () => {
-     
     requestAnimationFrame(animate);
 
     moveCamera();
-    
+
     //controls.update();
 
     particleEffect(particles, camera);
@@ -112,30 +133,32 @@ export const graphics = () => {
   animate();
 
   //raycaster
-  const raycaster = new THREE.Raycaster();  
+  const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
-  let intersects = null; 
-  let wallMaterial = null; 
+  let intersects = null;
+  let wallMaterial = null;
 
-  window.addEventListener('mousemove', event => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1; 
+  window.addEventListener('mousemove', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
 
-    if(raycaster.intersectObjects(contentWalls).length < 1 && wallMaterial) {
-      intersects[0].object.material = wallMaterial; 
-      wallMaterial = null; 
+    if (raycaster.intersectObjects(contentWalls).length < 1 && wallMaterial) {
+      intersects[0].object.material = wallMaterial;
+      wallMaterial = null;
     }
 
-    intersects = raycaster.intersectObjects(contentWalls); 
-    if(intersects.length > 0) {
-      wallMaterial = wallMaterial === null ? intersects[0].object.material : wallMaterial;
-      intersects[0].object.material = new THREE.MeshBasicMaterial({color: 0x32a852});
-    }  
+    intersects = raycaster.intersectObjects(contentWalls);
+    if (intersects.length > 0) {
+      wallMaterial =
+        wallMaterial === null ? intersects[0].object.material : wallMaterial;
+      intersects[0].object.material = new THREE.MeshBasicMaterial({
+        color: 0x32a852,
+      });
+    }
   });
-
 
   //modal
 
@@ -144,34 +167,26 @@ export const graphics = () => {
   const raycaster1 = new THREE.Raycaster();
   const mouse1 = new THREE.Vector2();
 
-  window.addEventListener('click', event => {
-
-    if(modal.style.display !== 'none'){
-      modal.style.display = 'none'
+  window.addEventListener('click', (event) => {
+    if (modal.style.display !== 'none') {
+      modal.style.display = 'none';
     }
-    mouse1.x = (event.clientX / window.innerWidth) * 2 - 1; 
-    mouse1.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    mouse1.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse1.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    raycaster1.setFromCamera(mouse1, camera); 
-    
-    const intersects1 =  raycaster1.intersectObjects(contentWalls);
+    raycaster1.setFromCamera(mouse1, camera);
 
-    if(intersects1.length  > 0){
-      
+    const intersects1 = raycaster1.intersectObjects(contentWalls);
+
+    if (intersects1.length > 0) {
       const photo = intersects1[0].object.userData.photo;
-      const description = intersects1[0].object.userData.description;  
+      const description = intersects1[0].object.userData.description;
 
-      modal.style.display = "flex"; 
+      modal.style.display = 'flex';
 
-      const content = document.getElementsByClassName('modal_content')[0]; 
+      const content = document.getElementsByClassName('modal_content')[0];
       content.innerHTML = `<img alt="item" src="${photo}"/>`;
       content.innerHTML += `<p> ${description} </p>`;
     }
   });
 };
-
-
-
- 
-
-

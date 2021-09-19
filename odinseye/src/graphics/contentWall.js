@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export const contentWall = (size, position, rotation, reducer = 0, orientation, photo, description = '') => {
+export const contentWall = (size, position, rotation, reducer = 0, orientation = 'x', photo, description = '') => {
 
   const boardSize = size * reducer; 
   //position.x = position.x + boardSize * .05; // This aligns the left side of the frame with the x value passed in. 
@@ -20,7 +20,6 @@ export const contentWall = (size, position, rotation, reducer = 0, orientation, 
   wall.position.z = position.z;
 
   wall.userData = {photo: photo, description: description};
-  console.log(wall.userData);
   let plankLength = 0; 
   let plankWidth = 0; 
   let planks = Array();
@@ -31,7 +30,7 @@ export const contentWall = (size, position, rotation, reducer = 0, orientation, 
     plankWidth = (boardSize / 2) * ((i + 1) % 2) > 0 ? (boardSize / 2) * ((i + 1) % 2) - boardSize * .05: boardSize * .05;
 
     let plankGeometry = new THREE.BoxGeometry(plankLength, .5, plankWidth);
-    const plankTexture = new THREE.TextureLoader().load('plank.jpg');
+    const plankTexture = new THREE.TextureLoader().load('./wall/plank.jpg');
     let plankMaterial = new THREE.MeshBasicMaterial({map: plankTexture}); 
 
     const plank = new THREE.Mesh(plankGeometry, plankMaterial);
@@ -49,9 +48,6 @@ export const contentWall = (size, position, rotation, reducer = 0, orientation, 
       plank.position.y = i < 2 ? position.y + ((i % 2) * boardSize / 4) : position.y - ((i % 2) * boardSize / 4);
       plank.position.x = position.x;
     }
-
-    
-
     planks.push(plank);
   }
 
