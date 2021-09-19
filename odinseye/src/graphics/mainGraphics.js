@@ -7,6 +7,8 @@ import { contentWall } from './contentWall';
 import { findGrid } from './findGrid';
 import { particleGen, particleEffect } from './particles';
 import { inventory } from './inventory';
+import { photoScroller } from './photoScroller';
+import { welcomeWallImages } from './welcomeWallImages';
 
 //setup
 const scene = new THREE.Scene();
@@ -104,17 +106,16 @@ export const graphics = () => {
   const image = './wall/papyrus.jpg';
   const { wall, planks } = contentWall(
     wallSize,
-    { x: 0, y: wallSize / 4, z: -wallSize / 2 + .51},
-    { x: Math.PI / 2, y: 0, z: 0},
-    reducer, 
-    'x', 
-    image,
-    'Hello'
+    { x: 0, y: wallSize / 4, z: -wallSize / 2 + 0.51 },
+    { x: Math.PI / 2, y: 0, z: 0 },
+    reducer,
+    'x',
+    image
   );
 
   scene.add(wall);
   console.log(wall);
-  planks.forEach(plank => scene.add(plank));
+  planks.forEach((plank) => scene.add(plank));
 
   //const controls = new OrbitControls( camera, renderer.domElement );
 
@@ -160,8 +161,7 @@ export const graphics = () => {
     }
   });
 
-  //modal
-
+  //Inventory modals
   const modal = document.getElementById('modal');
 
   const raycaster1 = new THREE.Raycaster();
@@ -189,4 +189,16 @@ export const graphics = () => {
       content.innerHTML += `<p> ${description} </p>`;
     }
   });
+
+  // Welcome Text
+  scene.add(
+    photoScroller(
+      welcomeWallImages,
+      wallSize,
+      { x: 0, y: wallSize / 4, z: -wallSize / 2 + 0.52 },
+      { x: Math.PI / 2, y: 0, z: 0 }, 
+      reducer, 
+      camera
+    )
+  );
 };
